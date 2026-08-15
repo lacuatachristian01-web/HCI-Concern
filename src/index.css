@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
+@import "tailwindcss";
+
+:root {
+  --primary-green: #10b981;
+  --dark-emerald: #064e3b;
+  --deep-forest: #022c22;
+  --accent-lime: #34d399;
+  --mint-glow: rgba(16, 185, 129, 0.25);
+  --glass-bg: rgba(6, 78, 59, 0.25);
+  --glass-border: rgba(52, 211, 153, 0.35);
+  --text-main: #ffffff;
+  --text-muted: #a7f3d0;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+body {
+  color: var(--text-main);
+  background-color: #010b06;
+  /* Fern leaves background wallpaper */
+  background-image: url("/fern-bg.jpg");
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Minimal overlay so the ferns stay visible through every page */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(1, 12, 8, 0.35);
+  pointer-events: none;
+  z-index: 0;
+}
+
+#root {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(1, 25, 16, 0.8);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #059669;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #10b981;
+}
+
+/* Ultra Glassy Transparent Frosted Card Design */
+.glass-card {
+  background: rgba(4, 35, 25, 0.28) !important;
+  backdrop-filter: blur(18px) saturate(150%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(150%) !important;
+  border: 1px solid rgba(52, 211, 153, 0.32) !important;
+  box-shadow: 0 16px 40px 0 rgba(0, 0, 0, 0.45) !important;
+  border-radius: 20px;
+}
+
+.glow-btn {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.85) 0%, rgba(5, 150, 105, 0.85) 100%);
+  backdrop-filter: blur(10px);
+  color: #ffffff;
+  font-weight: 800;
+  border: 1px solid rgba(52, 211, 153, 0.6);
+  border-radius: 14px;
+  padding: 12px 28px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 20px var(--mint-glow);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.glow-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(16, 185, 129, 0.55);
+  background: linear-gradient(135deg, rgba(52, 211, 153, 0.95) 0%, rgba(16, 185, 129, 0.95) 100%);
+}
+
+.glow-btn:active {
+  transform: translateY(0);
+}
