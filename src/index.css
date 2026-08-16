@@ -31,16 +31,16 @@ body {
 
 body {
   color: var(--text-main);
-  background-color: #010b06;
-  /* Fern leaves background wallpaper */
-  background-image: url("/fern-bg.jpg");
+  background-color: #05070d;
+  /* Night city background wallpaper */
+  background-image: url("/night-city-bg.jpg");
   background-attachment: fixed;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
 
-/* Minimal overlay so the ferns stay visible through every page */
+/* Minimal overlay so the background stays visible through every page */
 body::before {
   content: '';
   position: fixed;
@@ -48,7 +48,7 @@ body::before {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(1, 12, 8, 0.35);
+  background: rgba(2, 5, 10, 0.35);
   pointer-events: none;
   z-index: 0;
 }

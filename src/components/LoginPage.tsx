@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Leaf, Lock, Mail, ArrowRight, ArrowLeft, User as UserIcon, BookOpen, Eye, EyeOff, AlertCircle } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, User as UserIcon, BookOpen } from 'lucide-react';
 import { signInWithEmail, signUpWithEmail, mapSupabaseUser } from '../supabaseClient';
 import type { AppUser } from '../supabaseClient';
 
@@ -17,6 +17,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -25,16 +26,6 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
   const resetMessages = () => {
     setErrorMsg('');
     setInfoMsg('');
-  };
-
-  const goToSignUp = () => {
-    setMode('signup');
-    resetMessages();
-  };
-
-  const goToSignIn = () => {
-    setMode('signin');
-    resetMessages();
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -58,7 +49,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
         }
 
         if (data.user && !data.session) {
-          setInfoMsg('Account created. Check your email to confirm your address, then sign in below.');
+          setInfoMsg('Account created. Check your email to confirm your address, then sign in.');
           setMode('signin');
           setLoading(false);
           return;
@@ -86,111 +77,88 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center p-6 relative">
-      <div className="w-full max-w-[420px]">
+    <div
+      className="min-h-screen w-full flex items-center justify-center p-3 sm:p-6"
+      style={{
+        backgroundImage: 'url(/night-city-bg.jpg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
+      {/* Full-frame border, like a picture frame around the whole scene */}
+      <div className="w-full h-[calc(100vh-24px)] sm:h-[calc(100vh-48px)] rounded-3xl border border-white/25 overflow-hidden relative flex items-center justify-center">
+        {/* Darken the frame edges slightly so the card pops */}
+        <div className="absolute inset-0 bg-black/25 pointer-events-none" />
 
-        {/* Brand mark — small and left-aligned, not a huge centered badge */}
-        <div className="flex items-center gap-2.5 mb-8 px-1">
-          <div className="w-9 h-9 rounded-xl bg-emerald-400 flex items-center justify-center shrink-0">
-            <Leaf className="w-5 h-5 text-emerald-950" strokeWidth={2.5} />
-          </div>
-          <div>
-            <p className="text-white font-semibold text-sm leading-tight font-['Outfit']">GreenDesk</p>
-            <p className="text-white/40 text-[11px] leading-tight">Classroom Concern Portal</p>
-          </div>
-        </div>
-
+        {/* Glass card */}
         <div
-          className="rounded-2xl p-8 sm:p-9"
+          className="relative w-full max-w-sm mx-4 rounded-3xl p-8 sm:p-9"
           style={{
-            background: 'rgba(6, 20, 14, 0.32)',
-            backdropFilter: 'blur(22px) saturate(150%)',
-            WebkitBackdropFilter: 'blur(22px) saturate(150%)',
-            border: '1px solid rgba(255, 255, 255, 0.10)',
-            boxShadow: '0 20px 50px -12px rgba(0, 0, 0, 0.5)',
+            background: 'rgba(255, 255, 255, 0.08)',
+            backdropFilter: 'blur(18px) saturate(140%)',
+            WebkitBackdropFilter: 'blur(18px) saturate(140%)',
+            border: '1px solid rgba(255, 255, 255, 0.25)',
+            boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.6)',
           }}
         >
-          {mode === 'signup' && (
-            <button
-              type="button"
-              onClick={goToSignIn}
-              className="flex items-center gap-1.5 text-[13px] font-medium text-white/50 hover:text-white/90 transition-colors cursor-pointer mb-5 -mt-1"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" /> Back
-            </button>
-          )}
-
-          <div className="mb-7">
-            <h1 className="text-[26px] font-bold text-white font-['Outfit'] tracking-tight">
-              {mode === 'signup' ? 'Create your account' : 'Welcome back'}
-            </h1>
-            <p className="text-white/45 text-[14px] mt-1.5 leading-relaxed">
-              {mode === 'signup'
-                ? 'Set up your student profile to start reporting classroom issues.'
-                : 'Sign in to report and track classroom concerns.'}
-            </p>
-          </div>
+          <h1 className="text-center text-[26px] font-bold text-white font-['Outfit'] mb-7">
+            {mode === 'signup' ? 'Register' : 'Login'}
+          </h1>
 
           {(errorMsg || infoMsg) && (
             <div
-              className={`flex items-start gap-2.5 px-3.5 py-3 rounded-xl text-[13px] leading-snug mb-6 ${errorMsg
-                  ? 'bg-rose-500/10 text-rose-200 border border-rose-500/20'
-                  : 'bg-emerald-500/10 text-emerald-200 border border-emerald-500/20'
+              className={`px-3.5 py-2.5 rounded-lg text-[13px] leading-snug mb-5 text-center ${errorMsg ? 'text-rose-200' : 'text-emerald-200'
                 }`}
+              style={{ background: 'rgba(0,0,0,0.25)' }}
             >
-              <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 opacity-80" />
-              <span>{errorMsg || infoMsg}</span>
+              {errorMsg || infoMsg}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-5">
             {mode === 'signup' && (
               <>
-                <Field
-                  label="Full name"
+                <UnderlineField
                   icon={<UserIcon className="w-[18px] h-[18px]" />}
+                  placeholder="Full name"
                   type="text"
                   required
-                  placeholder="Juan Dela Cruz"
                   value={fullName}
                   onChange={setFullName}
                 />
-                <Field
-                  label="Course & year"
+                <UnderlineField
                   icon={<BookOpen className="w-[18px] h-[18px]" />}
+                  placeholder="Course & year"
                   type="text"
                   required
-                  placeholder="BSIT – WMAD 4C"
                   value={courseYear}
                   onChange={setCourseYear}
                 />
               </>
             )}
 
-            <Field
-              label="Email"
+            <UnderlineField
               icon={<Mail className="w-[18px] h-[18px]" />}
+              placeholder="Email"
               type="email"
               required
-              placeholder="you@student.edu.ph"
               value={email}
               onChange={setEmail}
             />
 
-            <Field
-              label="Password"
+            <UnderlineField
               icon={<Lock className="w-[18px] h-[18px]" />}
+              placeholder="Password"
               type={showPassword ? 'text' : 'password'}
               required
               minLength={6}
-              placeholder={mode === 'signup' ? 'At least 6 characters' : '••••••••'}
               value={password}
               onChange={setPassword}
               trailing={
                 <button
                   type="button"
                   onClick={() => setShowPassword((p) => !p)}
-                  className="text-white/35 hover:text-white/70 transition-colors cursor-pointer"
+                  className="text-white/60 hover:text-white cursor-pointer"
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
                   tabIndex={-1}
                 >
@@ -199,34 +167,62 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
               }
             />
 
+            {mode === 'signin' && (
+              <div className="flex items-center justify-between text-[13px] text-white/70 pt-1">
+                <label className="flex items-center gap-2 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                    className="w-3.5 h-3.5 accent-emerald-400 cursor-pointer"
+                  />
+                  Remember me
+                </label>
+              </div>
+            )}
+
             <button
               type="submit"
               disabled={loading}
-              className="w-full mt-2 py-3.5 rounded-xl font-semibold text-[15px] text-emerald-950 bg-emerald-400 hover:bg-emerald-300 active:bg-emerald-400 transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3.5 rounded-xl font-semibold text-[15px] text-emerald-950 bg-white hover:bg-emerald-50 transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
             >
               {loading ? (
-                <span className="w-4 h-4 border-2 border-emerald-950/40 border-t-emerald-950 rounded-full animate-spin" />
+                <span className="flex items-center justify-center">
+                  <span className="w-4 h-4 border-2 border-emerald-900/30 border-t-emerald-900 rounded-full animate-spin" />
+                </span>
+              ) : mode === 'signup' ? (
+                'Register'
               ) : (
-                <>
-                  <span>{mode === 'signup' ? 'Create account' : 'Sign in'}</span>
-                  <ArrowRight className="w-4 h-4" />
-                </>
+                'Login'
               )}
             </button>
           </form>
 
-          {mode === 'signin' && (
-            <p className="text-center text-[13px] text-white/40 mt-6">
-              New to GreenDesk?{' '}
-              <button
-                type="button"
-                onClick={goToSignUp}
-                className="text-emerald-300 hover:text-emerald-200 font-medium cursor-pointer"
-              >
-                Create an account
-              </button>
-            </p>
-          )}
+          <p className="text-center text-[13px] text-white/70 mt-6">
+            {mode === 'signin' ? (
+              <>
+                Don't have an account?{' '}
+                <button
+                  type="button"
+                  onClick={() => { setMode('signup'); resetMessages(); }}
+                  className="text-white font-semibold cursor-pointer"
+                >
+                  Register
+                </button>
+              </>
+            ) : (
+              <>
+                Already have an account?{' '}
+                <button
+                  type="button"
+                  onClick={() => { setMode('signin'); resetMessages(); }}
+                  className="text-white font-semibold cursor-pointer"
+                >
+                  Login
+                </button>
+              </>
+            )}
+          </p>
         </div>
       </div>
     </div>
@@ -234,11 +230,10 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
 };
 
 /* ---------------------------------------------------------------------- */
-/*  Shared field component — keeps every input's spacing/contrast in sync  */
+/*  Underline-style field — icon + input on a single bottom border line   */
 /* ---------------------------------------------------------------------- */
 
-interface FieldProps {
-  label: string;
+interface UnderlineFieldProps {
   icon: React.ReactNode;
   type: string;
   value: string;
@@ -249,8 +244,7 @@ interface FieldProps {
   trailing?: React.ReactNode;
 }
 
-const Field: React.FC<FieldProps> = ({
-  label,
+const UnderlineField: React.FC<UnderlineFieldProps> = ({
   icon,
   type,
   value,
@@ -260,28 +254,20 @@ const Field: React.FC<FieldProps> = ({
   minLength,
   trailing,
 }) => (
-  <div>
-    <label className="block text-[12.5px] font-medium text-white/55 mb-1.5">
-      {label}
-    </label>
-    <div
-      className="flex items-center gap-2.5 w-full px-3.5 rounded-xl transition-colors"
-      style={{
-        background: 'rgba(3, 15, 10, 0.55)',
-        border: '1px solid rgba(255, 255, 255, 0.10)',
-      }}
-    >
-      <span className="text-white/35 shrink-0 flex items-center">{icon}</span>
-      <input
-        type={type}
-        required={required}
-        minLength={minLength}
-        placeholder={placeholder}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="w-full bg-transparent text-white text-[14.5px] font-medium placeholder-white/25 focus:outline-none py-3"
-      />
-      {trailing && <span className="shrink-0 flex items-center">{trailing}</span>}
-    </div>
+  <div
+    className="flex items-center gap-3 w-full pb-2.5"
+    style={{ borderBottom: '1px solid rgba(255,255,255,0.35)' }}
+  >
+    <span className="text-white/70 shrink-0 flex items-center">{icon}</span>
+    <input
+      type={type}
+      required={required}
+      minLength={minLength}
+      placeholder={placeholder}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className="w-full bg-transparent text-white text-[15px] font-medium placeholder-white/60 focus:outline-none"
+    />
+    {trailing && <span className="shrink-0 flex items-center">{trailing}</span>}
   </div>
 );
